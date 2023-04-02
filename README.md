@@ -60,7 +60,7 @@ console.log(
 // Checking the book back in
 library.checkInBook(3);
 
-// Logging the book checked out by the patron
+// Logging the book checked in by the patron
 const checkedInBook = library.getBookById(3);
 console.log(
   `bookTitle: ${checkedInBook.title}, checkedOut: ${checkedInBook.status.checkedOut}`
