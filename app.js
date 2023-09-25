@@ -14,3 +14,88 @@ const books = [
   { author: "Aldous Huxley", title: "Animal Farm", id: 9 },
   { author: "Aldous Huxley", title: "Brave New World", id: 10 },
 ];
+function BookStatus(checkedOut = false, patron = null) {
+  this.checkedOut = checkedOut;
+  this.patron = patron;
+}
+
+function Book(title, author, id, status) {
+  this.title = title;
+  this.author = author;
+  this.id = id;
+  this.status = status;
+}
+
+function Patron(name, id) {
+  this.name = name;
+  this.id = id;
+}
+
+function Library(name, books) {
+  this.name = name;
+  this.books = books;
+
+  this.addBook = function(title, author, id) {
+    const newBook = new Book(title, author, id, new BookStatus());
+    this.books.push(newBook);
+  };
+
+  this.removeBook = function(id) {
+    const bookIndex = this.books.findIndex((book) => book.id === id);
+    if (bookIndex !== -1) {
+      this.books.splice(bookIndex, 1);
+    }
+  };
+
+  this.getBookById = function(id) {
+    return this.books.find((book) => book.id === id);
+  };
+
+this.checkOutBook = function(bookId, patron) {
+  const book = this.getBookById(bookId);
+  if (!book) {
+    console.log("Book not found.");
+    return;
+  }
+
+  if (book.status && book.status.checkedOut) {
+    console.log("Book is already checked out.");
+    return;
+  }
+
+  book.status = new BookStatus(true, patron);
+  console.log(`Checked out: ${book.title} by ${patron.name}`);
+};
+
+
+  this.checkInBook = function(bookId) {
+    const book = this.getBookById(bookId);
+    if (book && book.status?.checkedOut) {
+      book.status.checkedOut = false;
+      book.status.patron = null;
+    }
+  };
+}
+
+const library = new Library("Central Library", books);
+
+library.addBook("The Alchemist", "Paulo Coelho", 11);
+library.addBook("The Da Vinci Code", "Dan Brown", 12);
+
+library.removeBook(5);
+
+const patron = new Patron("John Smith", 1);
+
+library.checkOutBook(3, patron);
+
+const checkedOutBook = library.getBookById(3);
+console.log(
+  `bookTitle: ${checkedOutBook.title}, checkedOutBy: ${checkedOutBook.status?.patron?.name}`
+);
+
+library.checkInBook(3);
+
+const checkedInBook = library.getBookById(3);
+console.log(
+  `bookTitle: ${checkedInBook.title}, checkedOut: ${checkedInBook.status?.checkedOut}`
+);
